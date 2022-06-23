@@ -4,10 +4,15 @@ services:
     image: mysql
     container_name: mysql_marvel
     restart: always
+    ports:
+      - 3306:3306
     volumes:
       - db-data:/var/lib/mysql
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: marvel
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
     networks:
       - dev
 
@@ -19,8 +24,12 @@ services:
       - db
     ports:
       - 8080:80
+    links:
+      - db
     environment:
-      - PMA_ARBITARY=1
+      - PMA_HOST = db
+    networks:
+      - dev
 
   www:
     build: php
