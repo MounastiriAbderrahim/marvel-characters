@@ -29,36 +29,56 @@
 
     <div class="example-wrapper">
         <div class="row div-btn">
-            <a class="btn btn-primary btn-update" href="#">Update list</a>
+            <a class="btn btn-primary btn-update" href="{{ path('marvel_import') }}" disabled="true">Import list</a>
         </div>
         <div class="row">
-            <table id="dtBasicExample" class="table" width="100%">
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="row">
+            <table class="table" width="100%">
                 <thead>
                 <tr>
-                    <th class="th-md" style="width: 200px">Name
-
-                    </th>
-                    <th class="th-md" style="width: 280px">Picture
-
-                    </th>
-                    <th class="th-md" style="width: 200px">Created At
-
-                    </th>
+                    <th class="th-md" style="width: 200px">Name</th>
+                    <th class="th-md" style="width: 280px">Picture</th>
+                    <th class="th-md" style="width: 200px">Created At</th>
                 </tr>
                 </thead>
                 <tbody>
+                {% for character in characters %}
+                    <tr>
+                        <th>
+                            {{ character.name }}
+                        </th>
+                        <th>
+                            <img src="{{ character.pictureUrl }}/portrait_xlarge.{{ character.pictureType }}">
+                        </th>
+                        <th>
+                            {{ character.createdAt|date('Y-m-d h:m') }}
+                        </th>
+                    </tr>
+                {% endfor %}
                 </tbody>
+                {{ knp_pagination_render(characters) }}
             </table>
         </div>
     </div>
 {% endblock %}
-
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript">
-        $(document).ready(function () {
-            $('#dtBasicExample').DataTable();
-            $('.dataTables_length').addClass('bs-select');
+        // Disabled import button onclick
+        $('.btn-update').on('click', function(e) {
+            $(this).css("pointer-events",'none');
+            $(this).css("cursor",'default');
         });
     </script>
 {% endblock %}
