@@ -10,9 +10,16 @@ import {Characters} from "src/app/model/Characters";
 })
 export class AppComponent implements OnInit {
     loading = true;
+    config: any;
+    collection = { count: 0, data: [] };
 
     constructor(public http: HttpClient,
                 public crudApi: CharacterService,) {
+        this.config = {
+            itemsPerPage: 60,
+            currentPage: 1,
+            totalItems: this.collection.count
+        };
     }
 
     ngOnInit() {
@@ -23,8 +30,14 @@ export class AppComponent implements OnInit {
         this.crudApi.getAll().subscribe(
             response => {
                 this.crudApi.list = response["hydra:member"];
+                this.collection.data = response["hydra:member"];
+                this.collection.count = response["hydra:totalItems"];
                 this.loading = false;
             }
         );
+    }
+
+    pageChanged(event: any){
+        this.config.currentPage = event;
     }
 }

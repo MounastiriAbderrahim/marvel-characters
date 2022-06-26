@@ -1,4 +1,10 @@
 <style>
+    .center {
+        margin: auto;
+        width: 30%;
+        padding: 10px;
+    }
+
     .loader {
         position: fixed;
         left: 0px;
@@ -59,16 +65,21 @@
     <!-- Start List of characters-->
     <ng-template #loaded>
         <div class="row" style="margin-top: 80px">
-            <div class="col-sm-2" *ngFor="let item of crudApi.list| mapToIterable   ;let i=index; ">
+            <div class="col-sm-2" *ngFor="let item of crudApi.list | paginate: config   ;let i=index; ">
                 <div class="thumbnail">
                     <img class="card-img-top"
-                         src="{{item.value.pictureUrl}}/portrait_xlarge.{{item.value.pictureType}}">
-                    <div class="caption text-center" style="font-size: 13px">
-                        <p>{{item.value.name}}</p>
+                         src="{{item.pictureUrl}}/portrait_xlarge.{{item.pictureType}}">
+                    <div class="caption text-center" style="font-size: 13px; height: 66px">
+                        <p>{{item.name}}</p>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- Start Pagination-->
+        <div class="center">
+            <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+        </div>
+        <!-- End Pagination-->
     </ng-template>
     <!-- End List of characters-->
 
